@@ -1,6 +1,7 @@
+#!/usr/bin/python
+# -*- coding: UTF-8 -*-
 import wx
 import cv2
-import time
 import os
 import pymysql
 import configparser
@@ -9,7 +10,9 @@ import threading
 collect = Collect()
 face_cascade = cv2.CascadeClassifier("haarcascade_frontalface_alt2.xml");
 color = (0, 255, 0)
-save_path = "E:\\python\\face"
+config = configparser.ConfigParser()
+config.read("config.ini")
+save_path = config.get("img_save", "save_path")
 class Main(wx.Frame):
 
     def __init__(self, parent, title):
@@ -114,15 +117,17 @@ class Main(wx.Frame):
             wx.MessageBox("请打开摄像头，进行面部识别！")
             return
         _128 = collect.collect(self.detImg)
-        config = self.readIni()
+        if _128 is None:
+            wx.MessageBox("尚未识别到人脸！")
+            return
         host = config.get("db", "host")
         port = config.get("db", "port")
         user = config.get("db", "user")
         password = config.get("db", "password")
         db = config.get("db", "db")
         dbdialect = config.get("db", "dbdialect")
-        connection = self.getConnection(dbdialect, host, port, user, password, db)
         try:
+            connection = self.getConnection(dbdialect, host, port, user, password, db)
             with connection.cursor() as cursor:
                 findByNo = "select id from t_face_classfy where employeeNo='" + self.employeeNo +"'"
                 cursor.execute(findByNo)
@@ -135,17 +140,15 @@ class Main(wx.Frame):
                     cursor.execute(insertSql)
                 connection.commit()
                 wx.MessageBox("保存成功!")
+        except:
+            wx.MessageBox("保存失败！")
         finally:
             connection.close()
         event.Skip()
-    def readIni(self):
-        config = configparser.ConfigParser()
-        config.read("config.ini")
-        return config
     def getConnection(self, dbdialect, host, port, user, password, db):
         if "mysql" == dbdialect:
             return pymysql.connect(host=host, port=int(port), user=user, password=password, db=db, charset="utf8mb4",
-                                   cursorclass=pymysql.cursors.DictCursor);
+                                   cursorclass=pymysql.cursors.DictCursor)
 
 
 app = wx.App()

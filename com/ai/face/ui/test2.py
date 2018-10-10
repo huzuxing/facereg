@@ -3,6 +3,7 @@ import os
 from compare import Compare
 import numpy as np
 import string
+
 current_path = os.getcwd()  # 获取当前路径
 collect = Collect()
 compare = Compare()
