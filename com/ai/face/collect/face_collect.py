@@ -4,10 +4,11 @@ import dlib
 import cv2
 import os
 import logging as logger
-current_path = "D:\\projects\\python\\facereg\\com\\ai\\face\\collect" # 获取当前路径
+
+current_path = os.path.abspath("..") # 获取执行脚本的目录的上级目录
 # 模型路径
-predictor_path = current_path + "\\model\\shape_predictor_68_face_landmarks.dat"
-face_rec_model_path = current_path + "\\model\\dlib_face_recognition_resnet_model_v1.dat"
+predictor_path = current_path + os.sep + "collect" + os.sep + "model" + os.sep + "shape_predictor_68_face_landmarks.dat"
+face_rec_model_path = current_path + os.sep + "collect" + os.sep + "model" + os.sep + "dlib_face_recognition_resnet_model_v1.dat"
 # 读入模型
 detector = dlib.get_frontal_face_detector()
 shape_predictor = dlib.shape_predictor(predictor_path)

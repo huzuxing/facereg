@@ -128,15 +128,19 @@ class Main(wx.Frame):
         dbdialect = config.get("db", "dbdialect")
         try:
             connection = self.getConnection(dbdialect, host, port, user, password, db)
+        except:
+            wx.MessageBox("连接数据库失败！")
+            return
+        try:
             with connection.cursor() as cursor:
-                findByNo = "select id from t_face_classfy where employeeNo='" + self.employeeNo +"'"
+                findByNo = "select id from t_face_descriptor where employeeNo='" + self.employeeNo +"'"
                 cursor.execute(findByNo)
                 result = cursor.fetchone()
                 if result is not None:
-                    updateSql = "update t_face_classfy set face_classfy='" + _128 + "'"
+                    updateSql = "update t_face_descriptor set face_descriptor='" + _128 + "'"
                     cursor.execute(updateSql)
                 else:
-                    insertSql = "insert into t_face_classfy(employeeNo, face_classfy) values('" + self.employeeNo + "','" + _128 +"')"
+                    insertSql = "insert into t_face_descriptor(employeeNo, face_descriptor) values('" + self.employeeNo + "','" + _128 +"')"
                     cursor.execute(insertSql)
                 connection.commit()
                 wx.MessageBox("保存成功!")
