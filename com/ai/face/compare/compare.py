@@ -1,7 +1,6 @@
 #!/usr/bin/python
 # -*- coding: UTF-8 -*-
 import numpy as np
-import logging as logger
 class Compare:
     def __init__(self):
         pass
@@ -11,5 +10,4 @@ class Compare:
         # for i in range(len(d1)):
         #     diff += (d1[i] - d2[i])**2
         diff = np.sqrt(np.sum(np.square((d1 - d2))))
-        logger.warning("The comparing result is %f" % diff)
 

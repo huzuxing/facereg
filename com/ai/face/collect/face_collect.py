@@ -3,7 +3,7 @@
 import dlib
 import cv2
 import os
-import logging as logger
+import logger
 
 current_path = os.path.abspath("..") # 获取执行脚本的目录的上级目录
 # 模型路径
@@ -25,7 +25,7 @@ class Collect:
         b, g, r = cv2.split(img)
         img2 = cv2.merge([r, g, b])
         dets = detector(img, 1)  # 人脸标定
-        logger.warning("Number of faces detected: {}".format(len(dets)))
+        logger.info("Number of faces detected: {}".format(len(dets)))
         for index, face in enumerate(dets):
             logger.info('face {}; left {}; top {}; right {}; bottom {}'.format(index, face.left(), face.top(), face.right(),
                                                                                face.bottom()))
